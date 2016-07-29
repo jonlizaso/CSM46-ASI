@@ -127,7 +127,7 @@ C-----------------------------------------------------------------------
       REAL DPNAM, DPNUM, YPNAM, YPNUM
 !     Added 02/23/2011 Seasonal average environmental data
       INTEGER NDCH
-      REAL TMINA, TMAXA, SRADA, DAYLA, CO2A, PRCP, ETCP, ESCP, EPCP
+      REAL TMINA, TMAXA, SRADA, DAYLA, CO2A, PRCP, ETCP
 
       LOGICAL FEXIST
 
@@ -339,8 +339,6 @@ C     Initialize OPSUM variables.
       SUMDAT % CO2A   = -99.9 !Avg atm. CO2 (ppm) 
       SUMDAT % PRCP   = -99.9 !Cumul rainfall (mm), planting to harvest
       SUMDAT % ETCP   = -99.9 !Cumul ET (mm), planting to harvest
-      SUMDAT % ESCP   = -99.9 !Cumul soil evap (mm), planting to harvest
-      SUMDAT % EPCP   = -99.9 !Cumul transp (mm), planting to harvest
 
       CALL GET('WEATHER','WSTA',WSTAT)
 !      IF (LenString(WSTAT) < 1) THEN
@@ -429,8 +427,6 @@ C     Initialize OPSUM variables.
       CO2A   = SUMDAT % CO2A  !Avg atm. CO2 (ppm) 
       PRCP   = SUMDAT % PRCP  !Cumulative rainfall (mm) 
       ETCP   = SUMDAT % ETCP  !Cumul ET (mm), planting to harvest
-      ESCP   = SUMDAT % ESCP  !Cumul soil evap (mm), planting to harvest
-      EPCP   = SUMDAT % EPCP  !Cumul transp (mm), planting to harvest
 
 C-------------------------------------------------------------------
 C
@@ -474,24 +470,24 @@ C-------------------------------------------------------------------
 
           WRITE(NOUTDS,310)
   310     FORMAT(/,
-     &'!IDENTIFIERS......................... ',
-     &'TREATMENT................ SITE INFORMATION............ ',
-     &'DATES..........................................  ',
-     &'DRY WEIGHT, YIELD AND YIELD COMPONENTS....................',
-     &'..................  ',
-     &'WATER...............................................  ',
-     &'NITROGEN......................................  ',
-     &'PHOSPHORUS............  ',
-     &'POTASSIUM.............  ',
-     &'ORGANIC MATTER..................................    ',
-     &'WATER PRODUCTIVITY..................................',
-     &'................    ',
-     &'NITROGEN PRODUCTIVITY...........  ',
-     &'SEASONAL ENVIRONMENTAL DATA (Planting to harvest)..............')
+     &    '!IDENTIFIERS......................... ',
+     &    'TREATMENT................ SITE INFORMATION............ ',
+     &    'DATES..................................................  ',
+     &    'DRY WEIGHT, YIELD AND YIELD COMPONENTS....................',
+     &    '..................  ',
+     &    'WATER...............................................  ',
+     &    'NITROGEN......................................  ',
+     &    'PHOSPHORUS............  ',
+     &    'POTASSIUM.............  ',
+     &    'ORGANIC MATTER..................................    ',
+     &    'WATER PRODUCTIVITY..................................',
+     &    '................    ',
+     &    'NITROGEN PRODUCTIVITY...........  ',
+     &    'SEASONAL ENVIRONMENTAL DATA (Planting to harvest)')
 
           WRITE (NOUTDS,400)
-  400     FORMAT ('@   RUNNO   TRNO R# O# C# CR MODEL... ',
-     &    'TNAM..................... FNAM.... WSTA.... SOIL_ID...  ',
+  400     FORMAT ('@   RUNNO   TRNO R# O# C# CR MODEL    ',
+     &    'TNAM                      FNAM     WSTA.... SOIL_ID...  ',
      &    '  SDAT    PDAT    EDAT    ADAT    SKDT    MDAT    HDAT',
      &    '  DWAP    CWAM    HWAM    HWAH    BWAH  PWAM',
      &    '    HWUM  H#AM    H#UM  HIAM  LAIX',
@@ -503,8 +499,7 @@ C-------------------------------------------------------------------
      &    '    DMPPM    DMPEM    DMPTM    DMPIM     YPPM     YPEM',
      &    '     YPTM     YPIM',
      &    '    DPNAM    DPNUM    YPNAM    YPNUM',
-     &    '  NDCH TMAXA TMINA SRADA DAYLA   CO2A   PRCP   ETCP',
-     &    '   ESCP   EPCP')
+     &    '  NDCH TMAXA TMINA SRADA DAYLA   CO2A   PRCP   ETCP')
         ENDIF
 
         IF (BWAH < -1) BWAH = -9.9
@@ -534,7 +529,6 @@ C-------------------------------------------------------------------
         ELSEIF (HWUM < 10.)   THEN; FMT = '(1X,F7.3)'
         ELSEIF (HWUM < 100.)  THEN; FMT = '(1X,F7.2)'
         ELSEIF (HWUM < 1000.) THEN; FMT = '(1X,F7.1)'
-        ELSE                      ; FMT = '(1X,F7.0)'
         ENDIF
         WRITE (NOUTDS,FMT,ADVANCE="NO") HWUM
 
@@ -554,7 +548,7 @@ C-------------------------------------------------------------------
 !         Water productivity
      &    DMPPM, DMPEM, DMPTM, DMPIM, YPPM, YPEM, YPTM, YPIM,
      &    DPNAM, DPNUM, YPNAM, YPNUM,
-     &    NDCH, TMAXA, TMINA, SRADA, DAYLA, CO2A, PRCP, ETCP, ESCP, EPCP
+     &    NDCH, TMAXA, TMINA, SRADA, DAYLA, CO2A, PRCP, ETCP
 
   503   FORMAT(     
                                               
@@ -578,8 +572,8 @@ C-------------------------------------------------------------------
 !       DPNAM, DPNUM, YPNAM, YPNUM
      &  4F9.1,
 
-!       NDCH, TMINA, TMAXA, SRADA, DAYLA, CO2A, PRCP, ETCP, ESCP, EPCP
-     &  I6,3F6.1,F6.2,5F7.1)
+!       NDCH, TMINA, TMAXA, SRADA, DAYLA, CO2A, PRCP, ETCP
+     &  I6,3F6.1,F6.2,3F7.1)
 
         CLOSE (NOUTDS)
       ENDIF
@@ -587,9 +581,7 @@ C-------------------------------------------------------------------
 C     Console output for multi-season runs:
 C     Was OPBAT subroutine
 C-------------------------------------------------------------------
-!      IF (INDEX('NQSABCGF',RNMODE) .GT. 0 .OR. NYRS .GT. 1) THEN
-      IF ((INDEX('NQSABCGF',RNMODE) .GT. 0 .OR. NYRS .GT. 1) .AND.
-     &    (IDETL .NE. "0")) THEN
+      IF (INDEX('NQSABCGF',RNMODE) .GT. 0 .OR. NYRS .GT. 1) THEN
           NLINES = RUN - 1
         IF (RUN .EQ. 1) THEN
           CALL CLEAR
@@ -841,8 +833,6 @@ C=======================================================================
         CASE ('CO2A'); SUMDAT % CO2A   = VALUE(I)
         CASE ('PRCP'); SUMDAT % PRCP   = VALUE(I)
         CASE ('ETCP'); SUMDAT % ETCP   = VALUE(I)
-        CASE ('ESCP'); SUMDAT % ESCP   = VALUE(I)
-        CASE ('EPCP'); SUMDAT % EPCP   = VALUE(I)
 
         END SELECT
       ENDDO

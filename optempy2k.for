@@ -91,8 +91,7 @@ C=======================================================================
 C-----------------------------------------------------------------------
 C
 C-----------------------------------------------------------------------
-      OPEN (LUNIO, FILE = FILEIO,STATUS = 'UNKNOWN',IOSTAT=ERRNUM,
-     &      ACTION = 'READWRITE')
+      OPEN (LUNIO, FILE = FILEIO,STATUS = 'UNKNOWN',IOSTAT=ERRNUM)
       IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,ERRNUM,FILEIO,0)
 C-----------------------------------------------------------------------
 C     Write temp. required variables on top of file
@@ -188,7 +187,7 @@ C
 C-----------------------------------------------------------------------
       LINIO = LINIO + 1
       WRITE (LUNIO,915,IOSTAT=ERRNUM) MEWTH,MESIC,MELI,MEEVP,
-     & MEINF,MEPHO,MEHYD,NSWITCH,MESOM, MESEV, MESOL, METMP
+     & MEINF,MEPHO,MEHYD,NSWITCH,MESOM, MESEV, MESOL
       IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,ERRNUM,FILEIO,LINIO)
 C-----------------------------------------------------------------------
 C
@@ -422,32 +421,37 @@ C-----------------------------------------------------------------------
             WRITE (LUNIO,91,IOSTAT=ERRNUM)
      &            WMDATE(I),DAYFAC(I),DAYADJ(I),RADFAC(I),
      &            RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
-     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+!     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),
      &            DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
             ELSE IF (RADFAC(I) .EQ. 'M' .AND. RADADJ(I) .LE. 10.0) THEN
             WRITE (LUNIO,92,IOSTAT=ERRNUM)
      &            WMDATE(I),DAYFAC(I),DAYADJ(I),RADFAC(I),
      &            RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
-     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+!     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),
      &            DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
             ELSE IF (PRCFAC(I) .EQ. 'M' .AND. PRCADJ(I) .LE. 10.0) THEN
             WRITE (LUNIO,93,IOSTAT=ERRNUM)
      &            WMDATE(I),DAYFAC(I),DAYADJ(I),RADFAC(I),
      &            RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
-     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+!     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),
      &            DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
             ELSE IF ((TXFAC(I) .EQ. 'R' .AND. TXADJ(I) .LE. -10.0) .OR.
      &              (TMFAC(I) .EQ. 'R' .AND. TMADJ(I) .LE. -10.0)) THEN
             WRITE (LUNIO,94,IOSTAT=ERRNUM)
      &            WMDATE(I),DAYFAC(I),DAYADJ(I),RADFAC(I),
      &            RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
-     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+!     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),
      &            DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
             ELSE
             WRITE (LUNIO,90,IOSTAT=ERRNUM)
      &            WMDATE(I),DAYFAC(I),DAYADJ(I),RADFAC(I),
      &            RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
-     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+!     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),INT(CO2ADJ(I)),
+     &            PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),            
      &            DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
             ENDIF
             IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,ERRNUM,FILEIO,LINIO)
@@ -568,19 +572,6 @@ C-----------------------------------------------------------------------
           IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,ERRNUM,FILEIO,LINIO)
         END DO
         LINIO = LINIO + 1
-C-------------------------------------------------------------------------
-
-C-----------------------------------------------------------------------
-!       3rd tier soils - chp added 9/01/2011 for van Genuchten parameters
-        LINIO = LINIO + 1
-        WRITE (LUNIO,40)'                    '
-        DO I = 1, NLAYR
-          LINIO = LINIO + 1
-          WRITE (LUNIO,992,IOSTAT=ERRNUM) 
-     &      DS(I), alphaVG(I), mVG(I), nVG(I), WCR(I)
-  992     FORMAT (1X,F5.0,4F6.2)
-          IF (ERRNUM .NE. 0) CALL ERROR (ERRKEY,ERRNUM,FILEIO,LINIO)
-        END DO
       ENDIF   !End of non-sequence soils write
 C-------------------------------------------------------------------------
 
@@ -591,11 +582,6 @@ C-----------------------------------------------------------------------
 
 !     ------------------------------------------------------------------
         SELECT CASE (MODEL(1:5))
-
-!       Generic SALUS crops
-        CASE('SALUS')
-          WRITE(LUNIO,'(A6,1X,A16,7X,A)',IOSTAT=ERRNUM) VARNO, VRNAME,
-     &         trim(PLAINTXT)
 
 !       CROPGRO crops
         CASE('CRGRO')
@@ -610,8 +596,8 @@ C-----------------------------------------------------------------------
      &           THRESH, SDPRO, SDLIP
 
 !       Ceres wheat, barley
-!       CropSim - wheat, barley, cassava
-        CASE('WHCER', 'BACER', 'CSCRP','CSCAS')
+!       CropSim - wheat, cassava
+        CASE('WHCER', 'BACER', 'CSCRP')
 !       Do nothing - these models read the INH file written by OPTEMPXY2K
 
 !       Ceres Maize, sweetcorn
@@ -642,18 +628,12 @@ C-GH &               P1,P2O,P2R,P5,G1,G2,PHINT,P3,P4
 !       Ceres rice
         CASE ('RICER')
             WRITE (LUNIO,1985,IOSTAT=ERRNUM) VARNO,VRNAME,ECONO,
-     &             P1,P2R,P5,P2O,G1,G2,G3,G4,PHINT
-
-!       ORYZA rice
-        CASE ('RIORZ')
-            WRITE (LUNIO,'(A6,1X,A16,1X,A)',IOSTAT=ERRNUM) VARNO,VRNAME,
-     &          TRIM(PLAINTXT)
+     &             P1,P2R,P5,P2O,G1,G2,G3,G4
 
 !       Substor potato
         CASE ('PTSUB')
                WRITE (LUNIO,1400,IOSTAT=ERRNUM) VARNO,VRNAME,ECONO,
-     &               G2,G3,PD,P2,TC
-!     &               G2,G3,G4,PD,P2,TC
+     &               G2,G3,G4,PD,P2,TC
 
 !       CaneGro sugarcane
         CASE ('SCCAN')
@@ -737,14 +717,15 @@ c  78 FORMAT (3X,I5,1X,A5,1X,F5.2,1X,A5,1X,F5.2,1X,A5)
 C-Y2K79 FORMAT (3X,I5,1X,A5,1X,I5,3(1X,F5.2),2(1X,F5.0),1X,A5)
    80 FORMAT (3X,I7,1X,A5,1X,F5.1)
 C-Y2K 80 FORMAT (3X,I5,1X,A5,1X,F5.1)
-   91 FORMAT (3X,I7,1X,A1,F4.2,4(1X,A1,F4.1),1X,A1,I4,2(1X,A1,F4.1))
-   92 FORMAT (3X,I7,1X,A1,F4.1,1X,A1,F4.2,3(1X,A1,F4.1),1X,A1,I4,
+   91 FORMAT (3X,I7,1X,A1,F4.2,4(1X,A1,F4.1),1X,A1,F5.2,2(1X,A1,F4.1))
+   92 FORMAT (3X,I7,1X,A1,F4.1,1X,A1,F4.2,3(1X,A1,F4.1),1X,A1,F5.2,
      &       2(1X,A1,F4.1))
-   93 FORMAT (3X,I7,4(1X,A1,F4.1),1X,A1,F4.2,1X,A1,I4,
+   93 FORMAT (3X,I7,4(1X,A1,F4.1),1X,A1,F4.2,1X,A1,F5.2,
      &       2(1X,A1,F4.1))
-   94 FORMAT (3X,I7,2(1X,A1,F4.1),2(1X,A1,F4.0),1X,A1,F4.1,1X,A1,I4,
-     &       2(1X,A1,F4.1))
-   90 FORMAT (3X,I7,5(1X,A1,F4.1),1X,A1,I4,2(1X,A1,F4.1))
+   94 FORMAT (3X,I7,2(1X,A1,F4.1),2(1X,A1,F4.0),1X,A1,F4.1,1X,A1,
+     &       F5.2,2(1X,A1,F4.1))
+!   90 FORMAT (3X,I7,5(1X,A1,F4.1),1X,A1,I4,2(1X,A1,F4.1))
+   90 FORMAT (3X,I7,5(1X,A1,F4.1),1X,A1,F5.2,2(1X,A1,F4.1))
   100 FORMAT (3X,I7,3(1X,A5),2(1X,F5.0))
 C-Y2K 100 FORMAT (3X,I5,3(1X,A5),2(1X,F5.0))
   900 FORMAT (14X,I6,1X,I5,5X,A1,1X,I7,1X,I5,1X,A25)
@@ -776,8 +757,7 @@ C     &        1X,F5.2,19(1X,F5.1))
      &        F6.0,2F6.2,F6.2,7F6.1, 2F6.2, 1X, F5.4,7F6.1,F6.2,2F6.0,
      &        F6.1,F6.2,F6.2,F6.2,3F6.2,2F6.2)
 
- 1400 FORMAT (A6,1X,A16,1X,A6,1X,F6.0,4(F6.1))
-! 1400 FORMAT (A6,1X,A16,1X,A6,1X,F6.0,F6.1,F6.2,3(F6.1))
+ 1400 FORMAT (A6,1X,A16,1X,A6,1X,F6.0,F6.1,F6.2,3(F6.1))
  1500 FORMAT (A6,1X,A16,1X,A6,F6.2,F6.3,5F6.2,F6.3,2F6.1,F6.2,
      &        F6.3,3F6.2,F6.1,2F6.3)
  1550 FORMAT (A6,1X,A16,1X,A6,A)
@@ -796,7 +776,7 @@ c1960 FORMAT (A6,1X,A16,1X,A6,1X,F6.2,F8.4,F7.2,F8.2,F7.3,F4.0)
      &        1X,F5.0)
  1970 FORMAT (A6,1X,A16,1X,A6,1X,F6.1,F6.1,F6.0,F6.1,F6.2,F6.1)
  1975 FORMAT (A6,1X,A16,1X,A6,4(F6.0),2(F6.2),3(F6.1))
- 1985 FORMAT (A6,1X,A16,1X,A6,5(F6.1),F6.4,2(F6.2),F6.1)
+ 1985 FORMAT (A6,1X,A16,1X,A6,5(F6.1),F6.4,2(F6.2))
  1995 FORMAT (A6,1X,A16,1X,A6,F6.1,3(F6.3),F6.2,F6.1)
  2000 FORMAT ('*MODEL INPUT FILE   ',9X,A1,5(1X,I5))
  2040 FORMAT ('MODEL          ',A8,5X,A80)

@@ -2,9 +2,9 @@
 !  CO2VAL, Subroutine, CHPorter
 !  Determines daily CO2 value
 !     Switch ICO2:
-!     ICO2 = 'D'  use static value (CO2BAS from CO2???.WDA)
+!     ICO2 = 'D'  use static value (CO2BAS from CO2045.WDA)
 !     ICO2 = 'W'  use values read from weather file
-!     ICO2 = 'M'  use monthly values read from CO2???.WDA file 
+!     ICO2 = 'M'  use monthly values read from CO2045.WDA file 
 !                  (default)
 
 !-----------------------------------------------------------------------
@@ -12,12 +12,11 @@
 !  04/29/2008 CHP Written
 !  07/07/2008 CHP Added error handling routine
 !  08/31/2009 CHP Stop program if CO2 file not found or errors reading.
-!  07/25/2014 CHP Added daily CO2 read from weather file (DCO2)
 !-----------------------------------------------------------------------
 !  Called by: WEATHR
 !=======================================================================
 
-      SUBROUTINE CO2VAL(CONTROL, ISWITCH, CCO2, DCO2, CO2)
+      SUBROUTINE CO2VAL(CONTROL, ISWITCH, CCO2, CO2)
 !-----------------------------------------------------------------------
       USE ModuleDefs   
       IMPLICIT NONE
@@ -26,7 +25,6 @@
       TYPE (ControlType), INTENT(IN) :: CONTROL
       TYPE (SwitchType),  INTENT(IN) :: ISWITCH
       REAL,               INTENT(IN) :: CCO2
-      REAL,               INTENT(IN) :: DCO2
       REAL,               INTENT(OUT):: CO2
 
       CHARACTER*1 ICO2
@@ -73,8 +71,8 @@
       ENDIF
 
 !-----------------------------------------------------------------------
-!     Read from CO2???.WDA file
-      FILECO2 = 'CO2046.WDA'
+!     Read from CO2045.WDA file
+      FILECO2 = 'CO2045.WDA'
       LNUM = 0
       INQUIRE (FILE = FILECO2, EXIST = FEXIST)
 
@@ -216,7 +214,8 @@
 
       CO2 = CO2BAS
       IF (ICO2 == 'M' .AND. NVals > 0) THEN
-!       Get daily CO2 from CO2???.WDA file
+
+!       Get value to use for today
         CALL YR_DOY(CONTROL % YRDOY, YEAR, DOY)
 
         DO I = INDX, NVALS
@@ -229,19 +228,13 @@
             ELSEIF (DOY == FDOY(I)) THEN
               CO2 = FCO2(I)
               IF (CO2 < 1.) CO2 = CO2BAS
+              CO2BAS = CO2
               EXIT
             ENDIF
           ENDIF
         ENDDO
-
-      ELSEIF (ICO2 == 'W') THEN
-!       Use daily CO2 read from weather file
-        IF (DCO2 > 1.) THEN
-          CO2 = DCO2
-        ENDIF
       ENDIF
  
-      CO2BAS = CO2
 !-----------------------------------------------------------------------
       ENDIF   !END OF DYNAMIC BLOCK
 !-----------------------------------------------------------------------

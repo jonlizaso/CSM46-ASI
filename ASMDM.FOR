@@ -2,7 +2,7 @@ C=======================================================================
 C  ASMDM, Subroutine
 C  Calculates assimilative damage due to pests.
 C-----------------------------------------------------------------------
-!this is a change
+
 C  REVISION HISTORY
 C  03/20/98 CHP Written based on assimilative damage calculations in
 C               PLANT subroutine.

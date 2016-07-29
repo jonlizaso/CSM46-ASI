@@ -148,7 +148,7 @@ C-----------------------------------------------------------------------
       CASE ('MZ')
          STNAME( 1) = 'End Juveni'
          STNAME( 2) = 'Floral Ini'
-         STNAME( 3) = '75% Silkin'
+         STNAME( 3) = '50% Anthes'     !JIL 08/09/2013
          STNAME( 4) = 'Beg Gr Fil'
          STNAME( 5) = 'End Gr Fil'
          STNAME( 6) = 'Maturity  '

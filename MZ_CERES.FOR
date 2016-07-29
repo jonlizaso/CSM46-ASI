@@ -380,7 +380,7 @@ C----------------------------------------------------------------------
      &      PConc_Shel, PConc_Shut, PODWT, PORMIN, PSTRES1,     !Output
      &      PSTRES2, PTF, PUptake, RLWR, ROOTN, RSTAGE, RTWT,   !Output
      &      RTWTO,RWUMX,SATFAC,SDWT,SEEDNO,SENESCE,SHELPC,      !Output
-     &      SI1,SI3,SKERWT,SLA,SOILPROP,STMWTO,STOVER,STOVN,    !Output
+     &      SI1, SI3, SKERWT, SLA, STMWTO, STOVER, STOVN,       !Output
      &      STOVWT, SUMP, SWFAC, TOPWT, TURFAC, UNH4, UNO3,     !Output
      &      VSTAGE, WTLF, WTNCAN, WTNLF, WTNSD, WTNST, WTNUP,   !Output
      &      WTNVEG, XGNP, XHLAI, XLAI, XN, YIELD)               !Output
@@ -533,7 +533,7 @@ C-----------------------------------------------------------------------
      &      PConc_Shel, PConc_Shut, PODWT, PORMIN, PSTRES1,     !Output
      &      PSTRES2, PTF, PUptake, RLWR, ROOTN, RSTAGE, RTWT,   !Output
      &      RTWTO,RWUMX,SATFAC,SDWT,SEEDNO,SENESCE,SHELPC,      !Output
-     &      SI1,SI3,SKERWT,SLA,SOILPROP,STMWTO,STOVER,STOVN,    !Output
+     &      SI1, SI3, SKERWT, SLA, STMWTO, STOVER, STOVN,       !Output
      &      STOVWT, SUMP, SWFAC, TOPWT, TURFAC, UNH4, UNO3,     !Output
      &      VSTAGE, WTLF, WTNCAN, WTNLF, WTNSD, WTNST, WTNUP,   !Output
      &      WTNVEG, XGNP, XHLAI, XLAI, XN, YIELD)               !Output
@@ -698,7 +698,7 @@ C----------------------------------------------------------------------
      &      PConc_Shel, PConc_Shut, PODWT, PORMIN, PSTRES1,     !Output
      &      PSTRES2, PTF, PUptake, RLWR, ROOTN, RSTAGE, RTWT,   !Output
      &      RTWTO,RWUMX,SATFAC,SDWT,SEEDNO,SENESCE,SHELPC,      !Output
-     &      SI1,SI3,SKERWT,SLA,SOILPROP,STMWTO,STOVER,STOVN,    !Output
+     &      SI1, SI3, SKERWT, SLA, STMWTO, STOVER, STOVN,       !Output
      &      STOVWT, SUMP, SWFAC, TOPWT, TURFAC, UNH4, UNO3,     !Output
      &      VSTAGE, WTLF, WTNCAN, WTNLF, WTNSD, WTNST, WTNUP,   !Output
      &      WTNVEG, XGNP, XHLAI, XLAI, XN, YIELD)               !Output
@@ -798,7 +798,7 @@ C----------------------------------------------------------------------
      &      PConc_Shel, PConc_Shut, PODWT, PORMIN, PSTRES1,     !Output
      &      PSTRES2, PTF, PUptake, RLWR, ROOTN, RSTAGE, RTWT,   !Output
      &      RTWTO,RWUMX,SATFAC,SDWT,SEEDNO,SENESCE,SHELPC,      !Output
-     &      SI1,SI3,SKERWT,SLA,SOILPROP,STMWTO,STOVER,STOVN,    !Output
+     &      SI1, SI3, SKERWT, SLA, STMWTO, STOVER, STOVN,       !Output
      &      STOVWT, SUMP, SWFAC, TOPWT, TURFAC, UNH4, UNO3,     !Output
      &      VSTAGE, WTLF, WTNCAN, WTNLF, WTNSD, WTNST, WTNUP,   !Output
      &      WTNVEG, XGNP, XHLAI, XLAI, XN, YIELD)               !Output
@@ -906,7 +906,7 @@ C----------------------------------------------------------------------
      &      PConc_Shel, PConc_Shut, PODWT, PORMIN, PSTRES1,     !Output
      &      PSTRES2, PTF, PUptake, RLWR, ROOTN, RSTAGE, RTWT,   !Output
      &      RTWTO,RWUMX,SATFAC,SDWT,SEEDNO,SENESCE,SHELPC,      !Output
-     &      SI1,SI3,SKERWT,SLA,SOILPROP,STMWTO,STOVER,STOVN,    !Output
+     &      SI1, SI3, SKERWT, SLA, STMWTO, STOVER, STOVN,       !Output
      &      STOVWT, SUMP, SWFAC, TOPWT, TURFAC, UNH4, UNO3,     !Output
      &      VSTAGE, WTLF, WTNCAN, WTNLF, WTNSD, WTNST, WTNUP,   !Output
      &      WTNVEG, XGNP, XHLAI, XLAI, XN, YIELD)               !Output

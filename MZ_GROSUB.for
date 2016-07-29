@@ -252,7 +252,8 @@
       REAL        RWUMX
       REAL        SAT(NL)     
       REAL        SATFAC      
-      REAL        SBB
+      REAL        SBB1
+      REAL        SBB2
       REAL        SDSZ
       REAL        SDWT
       CHARACTER*6     SECTION 
@@ -439,8 +440,8 @@
 !     %                 P1,P2,P5,G2,G3,PHINT  
 !CHP 1800        FORMAT (A6,1X,A16,1X,A6,1X,F6.1,F6.3,2(F6.1),2(F6.2))    
 1800        FORMAT (A6,1X,A16,1X,A6,1X,8F6.0)    
-            IF (ASIS .LT. 1.0) THEN        !
-                ASI = 1.0
+            IF (ASIS .LT. 1.0) THEN        !  JIL 02/29/2016
+                ASI = 1.0                  !  ASIS (ASEN) cannot be < 1
                 ASIS = 3.0
             ENDIF
             IF (ERR .NE. 0) CALL ERROR(ERRKEY,ERR,FILEIO,LNUM)
@@ -768,7 +769,8 @@
           RTWTO  = 0.0
           RTWT   = 0.0
           SATFAC = 0.0
-          SBB    = 0.0
+          SBB1   = 0.0
+          SBB2   = 0.0
           SDWT   = 0.0
           SEEDNO = 0.0
           SEEDRV = 0.0
@@ -1491,27 +1493,26 @@
 !              ELSEIF (SUMDTT.GT.AAGDD .AND. RELASI.EQ.0.0) THEN
                 IF (RELASI.EQ.0.0) THEN
                   SHOOTGR = SHOOTGR/CRTDUR
-                  IF (SHOOTGR .LE. 7.0) THEN
-!                     SBB = 0.6213 * LOG(ASIS) - 0.0011
-                      SBB = 0.5164 * LOG(ASIS) - 0.0064
-                      RELASI = ASIS * SHOOTGR** -SBB
-                      IF (RELASI .LT. ASI) RELASI = ASI
+                  SBB1 = 0.4343 * LOG(ASIS) - 0.00003  !JIL Stress: SGR<10 g/pl d
+                  SBB2 = 0.5164 * LOG(ASIS) - 0.0064   !JIL Stress when SGR<7 g/pl d 
+
+                  IF(SHOOTGR .LT. 2.5) THEN
+                      RELASI=ASIS*SHOOTGR**-SBB1
+                  ELSEIF (SHOOTGR .LT. 3.5) THEN       !Interpolate
+                      RELASI=ASIS*SHOOTGR**-SBB1+((ASIS*2.5**-SBB2-
+     &                       ASIS*3.5**-SBB1)/(2.5-3.5))*(SHOOTGR-2.5)
                   ELSE
-                      RELASI = ((ASI-1.)/3.)*(AMIN1(SHOOTGR,10.)-7.)+1.0
+                      RELASI=ASIS*SHOOTGR**-SBB2
                   ENDIF
-                  ASI = RELASI
-!                  RELASI = ASIS * AMIN1(5.0, SHOOTGR)** -SBB
-!                  RELASI = ASIS * AMIN1(7.0, SHOOTGR)** -SBB   !JIL 03/17/2015 New Eq from Di Matteo data
-!                  RELASI = 0.414 + 2.527 * AMIN1(5.0, SHOOTGR)** -0.908
-!                  ASI = ASI + (RELASI-1.0)
-                  ASI = AMIN1(ASI, 30.)  ! Put an absolute maximum to ASI
-                  IF (ASI .LT. 0.0) THEN
-                    GPP = G2 * AMIN1(1.05/(1.+EXP(-0.7*(ASI+10.))),1.0)
+                  
+                  IF (RELASI .LT. 1.0) THEN
+                     GPP = G2*AMIN1(1.05/(1.+EXP(-0.7*(RELASI+9.))),1.0)
                   ELSE
-                    GPP = G2 * EXP(0.86 - 0.82*(ASI+1.1)**0.5)
-!                    GPP = G2 * EXP(0.86 - 0.82*(RELASI+0.1)**0.5)
+                     GPP = G2 * EXP(0.86 - 0.82*(RELASI+0.1)**0.5)
                   ENDIF
-                
+                  ASI = ASI + (RELASI-1.0)
+                  ASI = AMIN1(ASI, 30.)                       
+                  
                   ESLP = 1.02+0.18*THRE+0.07*THRE**2.
                   EARS = PLTPOP*AMIN1(1.-EXP(-ESLP*(SHOOTGR-THRE)),
      &                   AMIN1(1.38*(1.-EXP(-1.95*(GPP/G2+0.037))),1.0))
@@ -1524,7 +1525,7 @@
                   GFSWTCH = 1
                 ENDIF
 ! JIL 08/21/2013 The linear grain filling starts DSGFT (default 170) GDD after silking
-!                or anthesis, whatever the latest
+!                or after anthesis, whatever the latest
                 IF (NINT(ASI) .GT. 0 .AND. GFSWTCH .NE. 2) THEN
                   IF (NINT(ASI) .LE. DAA) THEN
                     DSGFT = DSGFT + TTAA(NINT(ASI))
@@ -1552,36 +1553,12 @@
               IF (PLTPOP .LE. 0.01) RETURN
 
               IF (ABS(CARBO) .GT. 0.0001) THEN        !<--------------!
-                  CMAT = 0
+                  CMAT = 0                                            !
                   SLAN   = PLA*(0.1+0.60*(SUMDTT/P5)**3)              !
-!JIL 08/11/2005 Remove this
-!                  LFWT   = LFWT*0.9990                                !
-
-
-!**************************************************************************
-!**************************************************************************
-!     CHP inserted old code for comparison of methods:
-!**************************************************************************
-!     DSSAT V3.5 CODE:
-!              RGFILL = 1.0 - 0.0025*(TEMPM-26.0)**2               !
-
-!**************************************************************************
-!     DSSAT V3.5 CODE modified:
-             !
-             ! CIMMYT 99 --JTR,US
-             !
-!             RGFILL = 1.4-0.003*(TEMPM-27.5)**2
-
-!**************************************************************************
-!     DSSAT V4.0 CODE:
-!-SPE             RGFILL = 1.4-0.003*(TEMPM-27.5)**2                  !
                   RGFILL = CURV('LIN',RGFIL(1),RGFIL(2),RGFIL(3),     !
      $                     RGFIL(4),TEMPM)                            !
                   RGFILL = AMIN1(1.0,RGFILL)                          !
                   RGFILL = AMAX1(0.0,RGFILL)                          !
-
-!**************************************************************************
-!**************************************************************************
 
                   GROGRN = RGFILL*GPP*G3*0.001*(0.45+0.55*SWFAC)      !
 
@@ -1966,7 +1943,7 @@
           SDWT = GRNWT*EARS         !Seed weight, g/m2
           GPSM = GPP * EARS         !Seed no/m2, but units don't match?
           SEEDNO=GPSM               !Seed no./m2
-
+          IF (EARS .LE. 0.0) GPP = 0.0
           IF(GPP.GT.0) THEN
 !              PODNO = SEEDNO/GPP    !Pod (ear) No/m2 
               PODNO = EARS
@@ -2227,6 +2204,7 @@
 ! CNSD2       !Cumulative nitrogen deficit on growth in each stage used
 !              to compute avg. stress during stage
 ! CUMPH       !Cumulative phyllochron intervals or fully expanded leaves
+              !Number of fully expanded leaves (p 77, Jones&Kiniry, 1986)
 ! CO2X(10)    !CO2 effect on photosynthesis, X axis is CO2 level, ppm
 ! CO2Y(10)    !CO2 effect on photosynthesis, Y axis is relative effect
 ! CO2         !Atmospheric CO2, ppm
@@ -2396,6 +2374,7 @@
 ! TEMPM       !Mean daily temperature, C
 ! TFAC        !Temperature stress factor for grain nitrogen concentration
 ! TI          !Fraction of a phyllochron interval which occurred as a fraction of today's daily thermal time
+              !Fraction of a leaf emerging in a day (p 77 Jones&Kiniry, 1986)
 ! TLNO        !Total number of leaves that the plant produces
 ! TMAX        !Maximum daily temperture, C
 ! TMNC        !Plant top minimum N concentration g N/g dry matter

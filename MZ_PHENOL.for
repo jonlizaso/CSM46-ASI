@@ -289,7 +289,8 @@
      &            C255(1:1) .NE. '*') THEN
               READ(C255,3100,IOSTAT=ERRNUM) ECOTYP,ECONAM,TBASE,TOPT,
      &             ROPT,P2O,DJTI,GDDE,DSGFT,RUE,KCAN,THRE
-3100          FORMAT (A6,1X,A16,1X,10(1X,F5.1))
+3100          FORMAT (A6,1X,A16,1X,9(1X,F5.1),14X,F5.1)
+
               IF (ERRNUM .NE. 0) CALL ERROR(ERRKEY,ERRNUM,FILEE,LNUM)
         
               IF (ECOTYP .EQ. ECONO) THEN
@@ -568,7 +569,7 @@
                       IF (NDAS .GE. DSGT) THEN
                           ISTAGE = 6
                           PLTPOP = 0.00
-                          GPP    = 1.0
+                          GPP    = 0.0
 
                           WRITE(MESSAGE(1),3500)
                           CALL WARNING(1,'MZPHEN',MESSAGE)
@@ -610,10 +611,10 @@
 	        ENDIF
               ! If GDD's pass a threshold, terminate model run
 
-              IF (P9 .GT. DGET) THEN
+              IF (P9 .GT. DGET) THEN    !Default 150 GDD
                   ISTAGE = 6
                   PLTPOP = 0.00
-                  GPP    = 1.0
+                  GPP    = 0.0
 
                   WRITE(MESSAGE(1),1399)
                   CALL WARNING(1,'MZPHEN',MESSAGE)
@@ -794,11 +795,6 @@
               !  maize.  Silking to beginning EFG is assumed to be 170 G
               XSTAGE = 4.5+5.5*SUMDTT/(P5*0.95)
 
-!             chp 9/23/2004, 5/11/2005
-!             SeedFrac = (SUMDTT + P3) / (P3 + DSGFT + P5)
-!              VegFrac = (SUMDTT + SUMDTT_2 + P3) / (SUMDTT_2 + P3+DSGFT)
-!              VegFrac = AMIN1(VegFrac, 1.0)
-
 !     CHP 5/25/2007 Move inflection point back to end of stage 3
               SeedFrac = SUMDTT / P5
 
@@ -813,49 +809,10 @@
               ! filling begins. Compute grains per plant, ears per plant
               ! and barrenness
 
-!              PSKER = SUMP*1000.0/IDURP*3.4/5.0
-!              GPP   = G2*PSKER/7200.0 + 50.0
-!              GPP   = AMIN1 (GPP, G2)
-!              GPP   = AMAX1 (GPP,0.0)
-!              EARS  = PLTPOP
+! 12/11/2015 JIL: Grains, Ears per plant and barrenness moved to MZ_GROSUB
 
-              !Determine barrenness for maize
-!              GPP = AMAX1 (GPP,51.0)
-             !
-             ! Barreness (mod. US and PWW, 7-21-98)
-             ! Barreness function based on stress (PSKER f(SUMP))
-             ! Smoothing function for ear number reduction
-             !
-!              IF (GPP .LT. G2*0.15) THEN
-!                  EARS = PLTPOP*(GPP/(G2*0.15))**0.33
-!              ELSE
-                  !
-                  ! CIMMYT - US & JTR revised barreness function
-                  !   
-!                  IF (PLTPOP .GT. 12.0) THEN
-                  !
-                  ! Barreness from high population
-                  !
-!                      IF (GPP .LT. G2*0.5) THEN
-                   !       ABSTRES = AMAX1 (SI1(3), SI3(3))
-                      !
-                      !    Barreness effect with min. N and H2O stress
-                      !
-                   !       IF (ABSTRES .LT. 0.25) THEN
-!                              BARFAC = 0.0085*(1.0-GPP/G2)*PLTPOP**1.5
-!                              EARS = PLTPOP*(GPP/(G2*0.50))**BARFAC
-                   !       ENDIF
-!                      ENDIF
-!                  ENDIF
-!              ENDIF
-
-!              EARS           = AMAX1 (EARS,0.0)
               STGDOY(ISTAGE) = YRDOY
               ISTAGE = 5
-
-!             CHP 5/11/2005
-!     CHP 5/25/2007 Move inflection point back to end of stage 3
-!              VegFrac = 1.0
 
       !-----------------------------------------------------------------
       !       ISTAGE = 5 - Beginning to end of effective grain filling 
@@ -906,7 +863,7 @@
               DTT    = 0.0
               IF (PLTPOP .NE. 0.0) THEN
                   IF (GPP .LE. 0.0) THEN
-                      GPP = 1.0
+                      GPP = 0.0
                   ENDIF
               ENDIF
 
