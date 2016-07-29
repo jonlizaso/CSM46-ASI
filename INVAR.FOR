@@ -528,7 +528,7 @@ C        Branch to menu choice
          END SELECT
 
 !=======================================================================
-!     CSCRP - CropSim wheat, barley
+!     CSCRP - CropSim wheat, barley, cassava
       CASE ('CSCRP')
         SELECT CASE (CROP)
 
@@ -653,88 +653,59 @@ C         Branch to menu choice
           CASE(19);  CALL GETREAL (VEFF ,'VEFF ', 0.00,  1.00)
           CASE(20);  CALL GETREAL (PPS2 ,'PPS2 ', 0.00, 200.0)
           END SELECT
-      END SELECT
 
 !     --------------------------------------------------------------
-!       CSCAS cassava
-        CASE ('CSCAS')
-          WRITE(*,5940)  
-     &     PPS1, B01ND, B12ND, B23ND, B34ND, B45ND, B56ND,
-     &     SRNWT, SRFR, HMPC, PHINT, LA1S, LAXS, LAXND, LAXN2,
-     &     LAFS, LAFND, SLASS, LLIFA, LPEFR, STFR
+!       CSCRP cassava
+        CASE ('CS')
+          WRITE(*,5940)  P1L, P2L, P4L, P5L, SRNOW, SRFR, LA1S,
+     &      LAXS, LAXNO, LAFS, LAFNO, LAWS, PHINT, LLIFA, STFR
 5940      FORMAT (12X,'0. End of changes ',//,
-     1  12X,' 1. PPS1  ( 0.00 -   0.00).......................[',F7.3,/,
-     2  12X,' 2. B01ND ( 10.0 -  100.0).......................[',F7.2,/,
-     3  12X,' 3. B12ND ( 10.0 -  100.0).......................[',F7.2,/,
-     4  12X,' 4. B23ND ( 10.0 -  100.0).......................[',F7.2,/,
-     5  12X,' 5. B34ND ( 10.0 -  100.0).......................[',F7.2,/,
-     6  12X,' 6. B45ND ( 10.0 -  200.0).......................[',F7.2,/,
-     7  12X,' 7. B56ND ( 10.0 -  200.0).......................[',F7.2,/,
-<<<<<<< HEAD
-     6  12X,' 8. SR#WT ( 0.20 -   0.35).......................[',F7.3,/,
-     6  12X,' 9. SRFR  ( 0.25 -   0.35).......................[',F7.3,/,
-     6  12X,'10. HMPC  ( 40.0 -   80.0).......................[',F7.3,/,
-     6  12X,'11. PHINT ( 15.0 -   30.0).......................[',F7.3,/,
-     6  12X,'12. LA1S  (200.0 -  400.0).......................[',F7.2,/,
-     6  12X,'13. LAXS  ( 1000 -   2000).......................[',F7.1,/,
-     6  12X,'14. LAXND ( 80.0 -  200.0).......................[',F7.2,/,
-     6  12X,'15. LAXN2 ( 80.0 -  200.0).......................[',F7.2,/,
-     7  12X,'16. LAFS  ( 20.0 -   50.0).......................[',F7.3,/,
-     7  12X,'17. LAFND (100.0 -  350.0).......................[',F7.2,/,
-     7  12X,'18. SLAS  (100.0 -  400.0).......................[',F7.2,/,
-     7  12X,'19. LLIFA (  8.0 -   15.0).......................[',F7.3,/,
-     7  12X,'20. LPEFR (0.250 -  0.400).......................[',F7.3,/,
-     7  12X,'21. STFR  (0.250 -  0.450).......................[',F7.3,/)
-=======
-     6  12X,' 9. SR#WT ( 0.20 -   0.35).......................[',F7.3,/,
-     6  12X,'10. SRFR  ( 0.25 -   0.35).......................[',F7.3,/,
-     6  12X,'11. HMPC  ( 40.0 -   80.0).......................[',F7.3,/,
-     6  12X,'12. PHINT ( 15.0 -   30.0).......................[',F7.3,/,
-     6  12X,'13. LA1SL (200.0 -  400.0).......................[',F7.2,/,
-     6  12X,'14. LAXS  ( 1000 -   2000).......................[',F7.1,/,
-     6  12X,'15. LAXND ( 80.0 -  200.0).......................[',F7.2,/,
-     6  12X,'16. LAXN2 ( 80.0 -  200.0).......................[',F7.2,/,
-     7  12X,'17. LAFS  ( 20.0 -   50.0).......................[',F7.3,/,
-     7  12X,'18. LAFND (100.0 -  350.0).......................[',F7.2,/,
-     7  12X,'19. SLASS (100.0 -  400.0).......................[',F7.2,/,
-     7  12X,'20. LLIFA (  8.0 -   15.0).......................[',F7.3,/,
-     7  12X,'21. LPEFR (0.250 -  0.400).......................[',F7.3,/,
-     7  12X,'22. STFR  (0.250 -  0.450).......................[',F7.3,/)
->>>>>>> upstream/cassava
+!    1  12X,' 1. PPS1 ( 0.00 -   0.00)........................[',F7.1,/,
+     2  12X,' 2. P1L. ( 10.0 -  100.0)........................[',F7.2,/,
+     3  12X,' 3. P2L. ( 10.0 -  100.0)........................[',F7.2,/,
+     4  12X,' 4. P4L. ( 10.0 -  100.0)........................[',F7.2,/,
+     4  12X,' 5. P5L. ( 10.0 -  200.0)........................[',F7.2,/,
+     5  12X,' 6. SRNOW(0.200 -  0.350)........................[',F7.3,/,
+     6  12X,' 7. SRFR (0.250 -  0.350)........................[',F7.3,/,
+     6  12X,' 8. LA1S (200.0 -  400.0)........................[',F7.2,/,
+     6  12X,' 9. LAXS (1000. -  2000.)........................[',F7.1,/,
+     6  12X,'10. LAXNO( 80.0 -  200.0)........................[',F7.2,/,
+     6  12X,'11. LAFS ( 20.0 -   50.0)........................[',F7.2,/,
+     6  12X,'12. LAFNO(100.0 -  350.0)........................[',F7.2,/,
+     6  12X,'13. LAWS (100.0 -  400.0)........................[',F7.2,/,
+     7  12X,'14. PHINT( 15.0 -   30.0)........................[',F7.2,/,
+     7  12X,'15. LLIFA(  8.0 -   15.0)........................[',F7.2,/,
+     7  12X,'16. STFR (0.250 -  0.450)........................[',F7.3,/)
 
           WRITE (*,5100)
 C
 C         Get menu choice
           READ  (5,'(I2)',IOSTAT=IERR) IPARAM
-          CALL SELPRO (0,22,IPARAM,NDEX,IERR)
+          CALL SELPRO (0,16,IPARAM,NDEX,IERR)
           IF (NDEX .EQ. 2) GOTO 3001
 C
 C         Branch to menu choice
           SELECT CASE(IPARAM)
           CASE(0);  RETURN
-          CASE( 1);  CALL GETREAL (PPS1  ,'PPS1 ', 0.00,  0.00)
-          CASE( 2);  CALL GETREAL (B01ND ,'B01ND ', 10.0, 100.0)
-          CASE( 3);  CALL GETREAL (B12ND ,'B12ND ', 10.0, 100.0)
-          CASE( 4);  CALL GETREAL (B23ND ,'B23ND ', 10.0, 100.0)
-          CASE( 5);  CALL GETREAL (B34ND ,'B34ND ', 10.0, 100.0)
-          CASE( 6);  CALL GETREAL (B45ND ,'B45ND ', 10.0, 200.0)
-          CASE( 7);  CALL GETREAL (B56ND ,'B56ND ', 10.0, 200.0)
-          CASE( 8);  CALL GETREAL (SRNWT ,'SR#WT ',0.200, 0.350)
-          CASE( 9);  CALL GETREAL (SRFR  ,'SRFR  ',0.250, 0.350)
-          CASE(10);  CALL GETREAL (HMPC  ,'HMPC  ', 40.0,  80.0)
-          CASE(11);  CALL GETREAL (PHINT ,'PHINT', 15.0,  30.0)
-          CASE(12);  CALL GETREAL (LA1S  ,'LA1S ',200.0, 400.0)
-          CASE(13);  CALL GETREAL (LAXS  ,'LAXS',1000.,2000.0)
-          CASE(14);  CALL GETREAL (LAXND ,'LAXND ', 80.0, 200.0)
-          CASE(15);  CALL GETREAL (LAXN2 ,'LAXN2', 80.0, 200.0)
-          CASE(16);  CALL GETREAL (LAFS  ,'LAFS', 20.0,  50.0)
-          CASE(17);  CALL GETREAL (LAFND ,'LAFND ',100.0, 350.0)
-          CASE(18);  CALL GETREAL (SLASS ,'SLAS ',100.0, 400.0)
-          CASE(19);  CALL GETREAL (LLIFA ,'LLIFA ',  8.0,  15.0)
-          CASE(20);  CALL GETREAL (LPEFR ,'LPEFR ',0.200, 0.400)
-          CASE(21);  CALL GETREAL (STFR  ,'STFR ',0.250, 0.450)
+!         CASE( 1);  CALL GETREAL (PPS1 ,'PPS1 ', 0.00,  0.00)
+          CASE( 2);  CALL GETREAL (P1L  ,'P1L  ', 0.00, 100.0)
+          CASE( 3);  CALL GETREAL (P2L  ,'P2L  ', 0.00, 100.0)
+          CASE( 4);  CALL GETREAL (P4L  ,'P4L  ', 0.00, 100.0)
+          CASE( 5);  CALL GETREAL (P5L  ,'P5L  ', 0.00, 200.0)
+          CASE( 6);  CALL GETREAL (SRNOW,'SRNOW',0.200, 0.350)
+          CASE( 7);  CALL GETREAL (SRFR ,'SRFR ',0.250, 0.350)
+          CASE( 8);  CALL GETREAL (LA1S ,'LA1S ',200.0, 400.0)
+          CASE( 9);  CALL GETREAL (LAXS ,'LAXS ',1000., 2000.)
+          CASE(10);  CALL GETREAL (LAXNO,'LAXNO', 80.0, 200.0)
+          CASE(11);  CALL GETREAL (LAFS ,'LAFS ', 20.0,  50.0)
+          CASE(12);  CALL GETREAL (LAFNO,'LAFNO',100.0, 350.0)
+          CASE(13);  CALL GETREAL (LAWS ,'LAWS ',100.0, 400.0)
+          CASE(14);  CALL GETREAL (PHINT,'PHINT', 15.0,  30.0)
+          CASE(15);  CALL GETREAL (LLIFA,'LLIFA',  8.0,  15.0)
+          CASE(16);  CALL GETREAL (STFR ,'STFR ',0.250, 0.450)
         END SELECT
 
+      END SELECT
 
 !=======================================================================
 !     CANEGRO sugarcane model
@@ -1017,23 +988,25 @@ C
       ELSE IF (IPARAM .EQ. 5) THEN
           CALL GETREAL (GCOEFF( 5),'S#PE ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 6) THEN
-          CALL GETREAL (GCOEFF( 6),'S#PX ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF( 6),'S#FX ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 7) THEN
-          CALL GETREAL (GCOEFF( 7),'SWNX ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF( 7),'S#PX ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 8) THEN
-          CALL GETREAL (GCOEFF( 8),'L#IS ', 0.01,7000.0)
-      ELSE IF (IPARAM .EQ.  9) THEN
-          CALL GETREAL (GCOEFF( 9),'L#IP ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF( 8),'SWNX ', 0.01,7000.0)
+      ELSE IF (IPARAM .EQ. 9) THEN
+          CALL GETREAL (GCOEFF( 9),'L#IS ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 10) THEN
-          CALL GETREAL (GCOEFF(10),'LALX ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF(10),'L#IP ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 11) THEN
-          CALL GETREAL (GCOEFF(11),'LAXA ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF(11),'LALX ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 12) THEN
-          CALL GETREAL (GCOEFF(12),'LAL3 ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF(12),'LAXA ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 13) THEN
-          CALL GETREAL (GCOEFF(13),'LAWS ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF(13),'LAL3 ', 0.01,7000.0)
       ELSE IF (IPARAM .EQ. 14) THEN
-          CALL GETREAL (GCOEFF(14),'LFLI ', 0.01,7000.0)
+          CALL GETREAL (GCOEFF(14),'LAWS ', 0.01,7000.0)
+      ELSE IF (IPARAM .EQ. 15) THEN
+          CALL GETREAL (GCOEFF(15),'LFLI ', 0.01,7000.0)
       ENDIF
 
       GOTO 3001
@@ -1048,11 +1021,12 @@ C-----------------------------------------------------------------------
  5300 FORMAT (
      &15X,' 1. DUB1..........[',F6.1,']   2. DUBR..........[',F6.1,']'/,
      &15X,' 3. DESP..........[',F6.2,']   4. PHCX..........[',F6.1,']'/,
-     &15X,' 5. S#PE..........[',F6.1,']   6. S#PX..........[',F6.1,']'/,
-     &15X,' 7. SWNX..........[',F6.3,']   8. L#IS..........[',F6.2,']'/,
-     &15X,' 9. L#IP..........[',F6.1,']  10. LALX..........[',F6.1,']'/,
-     &15X,'11. LAXA..........[',F6.1,']  12. LAL3..........[',F6.1,']'/,
-     &15X,'13. LAWS..........[',F6.1,']  14. LFLI..........[',F6.1,']')
+     &15X,' 5. S#PE..........[',F6.1,']   6. S#FX..........[',F6.2,']'/,
+     &15X,' 7. S#PX..........[',F6.1,']   8. SWNX..........[',F6.3,']'/,
+     &15X,' 9. L#IS..........[',F6.2,']  10. L#IP..........[',F6.1,']'/,
+     &15X,'11. LALX..........[',F6.1,']  12. LAXA..........[',F6.1,']'/,
+     &15X,'13. LAL3..........[',F6.1,']  14. LAWS..........[',F6.1,']'/,
+     &15X,'15. LFLI..........[',F6.1,']')
 
       END SUBROUTINE INVRCS
 

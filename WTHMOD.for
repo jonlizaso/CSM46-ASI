@@ -112,7 +112,8 @@ C-----------------------------------------------------------------------
      &        RADADJ(I),TXFAC(I),TXADJ(I),TMFAC(I),TMADJ(I),
      &        PRCFAC(I),PRCADJ(I),CO2FAC(I),CO2ADJ(I),
      &        DPTFAC(I),DPTADJ(I),WNDFAC(I),WNDADJ(I)
-  120     FORMAT(5(1X,A1,F4.1),1X,A1,F4.0,2(1X,A1,F4.1))
+!  120     FORMAT(5(1X,A1,F4.1),1X,A1,F4.0,2(1X,A1,F4.1))
+  120     FORMAT(5(1X,A1,F4.1),1X,A1,F5.2,2(1X,A1,F4.1))
           IF (ERR .NE. 0) CALL ERROR(ERRKEY,ERR,FILEIO,LNUM)
           NEV = NEV + 1
         ENDDO
